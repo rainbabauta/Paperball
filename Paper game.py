@@ -14,11 +14,26 @@ pygame.init()
 size = (700, 500)
 screen = pygame.display.set_mode(size)
 background_image = pygame.image.load("zelda.jpg").convert()
-player_image = pygame.image.load("player.png").convert()
-player_image.set_colorkey(BLACK)
-pygame.display.set_caption("My Game")
-click_sound = pygame.mixer.Sound("laser5.ogg")
- 
+ball_sprite = pygame.image.load("paper20.png").convert()
+ball_sprite.set_colorkey(RED)
+
+class Ball():
+    def __init__(self):
+        self.x = ""
+        self.y = ""
+        self.changex = 0
+        self.changey = 0
+
+    def move(self):
+        self.x += self.changex
+        self.y += self.changey
+
+paper_ball = Ball()
+paper_ball.x = 0
+paper_ball.y = 0
+
+
+
 # Loop until the user clicks the close button.
 done = False
 
@@ -35,7 +50,8 @@ while not done:
         if event.type == pygame.QUIT: # If user clicked close
             done = True # Flag that we are done so we exit this loop
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            click_sound.play()
+            paper_ball.changex += 1
+            paper_ball.changey += 1
     # --- Game logic should go here
  
     # --- Drawing code should go here
@@ -48,11 +64,10 @@ while not done:
 
     # Get the current mouse position. This returns the position
     # as a list of two numbers.
-    player_position = pygame.mouse.get_pos()
-    x = player_position[0]
-    y = player_position[1]
-     
-    screen.blit(player_image, [x, y])
+    
+    paper_ball.move()
+
+    screen.blit(ball_sprite, [paper_ball.x, paper_ball.y])
 
        
 
