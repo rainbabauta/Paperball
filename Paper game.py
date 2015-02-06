@@ -14,24 +14,31 @@ pygame.init()
 size = (700, 500)
 screen = pygame.display.set_mode(size)
 background_image = pygame.image.load("zelda.jpg").convert()
-ball_sprite = pygame.image.load("paper20.png").convert()
-ball_sprite.set_colorkey(RED)
 
-class Ball():
+class Ball(pygame.sprite.Sprite):
     def __init__(self):
+        super(Ball, self).__init__()
         self.x = ""
         self.y = ""
         self.changex = 0
         self.changey = 0
+        self.ball_sprite = pygame.image.load("paper20.png").convert()
+        self.ball_sprite.set_colorkey(RED)
+
+
 
     def move(self):
         self.x += self.changex
         self.y += self.changey
 
 paper_ball = Ball()
-paper_ball.x = 0
-paper_ball.y = 0
+paper_ball.x = 200
+paper_ball.y = 200
 
+pygame.display.set_caption("Paperball")
+
+all_sprites = pygame.sprite.Group()
+all_sprites.add(paper_ball)
 
 
 # Loop until the user clicks the close button.
@@ -51,7 +58,7 @@ while not done:
             done = True # Flag that we are done so we exit this loop
         elif event.type == pygame.MOUSEBUTTONDOWN:
             paper_ball.changex += 1
-            paper_ball.changey += 1
+            paper_ball.changey += 0
     # --- Game logic should go here
  
     # --- Drawing code should go here
@@ -67,9 +74,8 @@ while not done:
     
     paper_ball.move()
 
-    screen.blit(ball_sprite, [paper_ball.x, paper_ball.y])
+    screen.blit(paper_ball.ball_sprite, [paper_ball.x, paper_ball.y])
 
-       
 
  
     # --- Go ahead and update the screen with what we've drawn.
