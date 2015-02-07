@@ -15,6 +15,8 @@ size = (700, 500)
 screen = pygame.display.set_mode(size)
 background_image = pygame.image.load("zelda.jpg").convert()
 
+change_pos = False
+
 class Ball(pygame.sprite.Sprite):
     def __init__(self):
         super(Ball, self).__init__()
@@ -22,14 +24,44 @@ class Ball(pygame.sprite.Sprite):
         self.y = ""
         self.changex = 0
         self.changey = 0
+        self.gravity = .025
+
         self.ball_sprite = pygame.image.load("paper20.png").convert()
         self.ball_sprite.set_colorkey(RED)
 
 
 
-    def move(self):
-        self.x += self.changex
-        self.y += self.changey
+    def movex(self):
+        if change_pos == True:
+            self.x += self.changex
+
+            if self.changex > 0:
+                if self.changex <= 0:
+                    self.changex = 0
+                self.changex -= self.gravity
+
+            elif self.changex < 0:
+                self.changex += self.gravity
+                if self.changex >= 0:
+                    self.changex = 0
+
+
+    def movey(self):
+        if change_pos == True:
+            self.y += self.changey
+
+            if self.changey > 0:
+                self.changey -= self.gravity
+                if self.changey <= 0:
+                    self.changey = 0
+            elif self.changey < 0:
+                self.changey += self.gravity
+                if self.changey >= 0:
+                    self.changey = 0
+                    self.changex = 0
+
+
+
 
 paper_ball = Ball()
 paper_ball.x = 200
@@ -56,9 +88,22 @@ while not done:
     for event in pygame.event.get(): # User did something
         if event.type == pygame.QUIT: # If user clicked close
             done = True # Flag that we are done so we exit this loop
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            paper_ball.changex += 1
-            paper_ball.changey += 0
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT and change_pos == False:
+                paper_ball.changex += 1
+                print "x = " + str(paper_ball.changex)
+            if event.key == pygame.K_LEFT and change_pos == False:
+                paper_ball.changex -= 1
+                print "x = " + str(paper_ball.changex)
+            if event.key == pygame.K_UP and change_pos == False:
+                paper_ball.changey -= 1
+                print "y = " + str(paper_ball.changey)
+            if event.key == pygame.K_DOWN and change_pos == False:
+                paper_ball.changey += 1
+                print "y = " + str(paper_ball.changey)
+            if event.key == pygame.K_SPACE:
+                change_pos = True
+        
     # --- Game logic should go here
  
     # --- Drawing code should go here
@@ -72,7 +117,10 @@ while not done:
     # Get the current mouse position. This returns the position
     # as a list of two numbers.
     
-    paper_ball.move()
+    paper_ball.movex()
+    paper_ball.movey()
+
+
 
     screen.blit(paper_ball.ball_sprite, [paper_ball.x, paper_ball.y])
 
