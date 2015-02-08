@@ -1,15 +1,16 @@
 import pygame
 import math
 #test
- 
+#Leo rules
+
 # Define some colors
 BLACK    = (   0,   0,   0)
 WHITE    = ( 255, 255, 255)
 GREEN    = (   0, 255,   0)
 RED      = ( 255,   0,   0)
- 
+
 pygame.init()
- 
+
 # Set the width and height of the screen [width, height]
 size = (700, 500)
 screen = pygame.display.set_mode(size)
@@ -79,7 +80,7 @@ done = False
 
 # Used to manage how fast the screen updates
 clock = pygame.time.Clock()
- 
+
 # -------- Main Program Loop -----------
 while not done:
 
@@ -103,11 +104,11 @@ while not done:
                 print "y = " + str(paper_ball.changey)
             if event.key == pygame.K_SPACE:
                 change_pos = True
-        
+
     # --- Game logic should go here
- 
+
     # --- Drawing code should go here
- 
+
     # First, clear the screen to white. Don't put other drawing commands
     # above this, or they will be erased with this command.
     screen.fill(WHITE)
@@ -116,7 +117,7 @@ while not done:
 
     # Get the current mouse position. This returns the position
     # as a list of two numbers.
-    
+
     paper_ball.movex()
     paper_ball.movey()
 
@@ -125,13 +126,13 @@ while not done:
     screen.blit(paper_ball.ball_sprite, [paper_ball.x, paper_ball.y])
 
 
- 
+
     # --- Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
- 
+
     # --- Limit to 60 frames per second
     clock.tick(60)
- 
+
 # Close the window and quit.
 # If you forget this line, the program will 'hang'
 # on exit if running from IDLE.
