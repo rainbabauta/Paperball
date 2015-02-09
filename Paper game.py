@@ -118,6 +118,8 @@ while not done:
     # Call the update() method for all blocks in the block_list
     all_sprites.update()
 
+
+
     # Update & display ball sprite
     all_sprites.draw(screen)
 
