@@ -12,9 +12,9 @@ RED      = ( 255,   0,   0)
 pygame.init()
 
 # Set the width and height of the screen [width, height]
-size = (700, 500)
+size = (333, 700)
 screen = pygame.display.set_mode(size)
-background_image = pygame.image.load("zelda.jpg").convert()
+background_image = pygame.image.load("room.jpg").convert()
 
 change_pos = False
 
@@ -65,7 +65,7 @@ class Ball(pygame.sprite.Sprite):
 
 
 paper_ball = Ball()
-paper_ball.x = 200
+paper_ball.x = 139
 paper_ball.y = 200
 
 pygame.display.set_caption("Paperball")
