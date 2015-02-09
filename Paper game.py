@@ -17,6 +17,9 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Paperball")
 background_image = pygame.image.load("room.jpg").convert()
 
+targetx = 140
+targety = 100
+
 
 change_pos = False
 
@@ -62,7 +65,6 @@ class Ball(pygame.sprite.Sprite):
                 if self.changey >= 0:
                     self.changey = 0
                     self.changex = 0
-
 
 
 paper_ball = Ball()
@@ -111,12 +113,15 @@ while not done:
     # --- Drawing code should go here
     screen.blit(background_image, [0, 0])
 
+    pygame.draw.rect(screen, BLACK, [targetx, targety, 50, 50])
+
     # Call the update() method for all blocks in the block_list
     all_sprites.update()
 
+
+
     # Update & display ball sprite
     all_sprites.draw(screen)
-
 
 
     # --- Go ahead and update the screen with what we've drawn.
