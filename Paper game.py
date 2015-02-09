@@ -14,9 +14,12 @@ pygame.init()
 # Set the width and height of the screen [width, height]
 size = (333, 700)
 screen = pygame.display.set_mode(size)
+pygame.display.set_caption("Paperball")
 background_image = pygame.image.load("room.jpg").convert()
 
+
 change_pos = False
+
 
 class Ball(pygame.sprite.Sprite):
     def __init__(self):
@@ -25,16 +28,18 @@ class Ball(pygame.sprite.Sprite):
         self.y = ""
         self.changex = 0
         self.changey = 0
-        self.gravity = .025
+        self.gravity = 0
 
-        self.ball_sprite = pygame.image.load("paper20.png").convert()
-        self.ball_sprite.set_colorkey(RED)
+        self.image = pygame.image.load("paper20.png").convert()
+        self.image.set_colorkey(RED)
+        self.rect = self.image.get_rect(center=(168,600))
 
 
 
-    def movex(self):
+    def update(self):
         if change_pos == True:
-            self.x += self.changex
+            print "yep"
+            self.rect.x += self.changex
 
             if self.changex > 0:
                 if self.changex <= 0:
@@ -46,10 +51,7 @@ class Ball(pygame.sprite.Sprite):
                 if self.changex >= 0:
                     self.changex = 0
 
-
-    def movey(self):
-        if change_pos == True:
-            self.y += self.changey
+            self.rect.y += self.changey
 
             if self.changey > 0:
                 self.changey -= self.gravity
@@ -63,12 +65,9 @@ class Ball(pygame.sprite.Sprite):
 
 
 
-
 paper_ball = Ball()
 paper_ball.x = 139
 paper_ball.y = 600
-
-pygame.display.set_caption("Paperball")
 
 all_sprites = pygame.sprite.Group()
 all_sprites.add(paper_ball)
@@ -83,7 +82,6 @@ clock = pygame.time.Clock()
 
 # -------- Main Program Loop -----------
 while not done:
-
 
     # --- Main event loop
     for event in pygame.event.get(): # User did something
@@ -104,26 +102,20 @@ while not done:
                 print "y = " + str(paper_ball.changey)
             if event.key == pygame.K_SPACE:
                 change_pos = True
+                print "shoot"
+
 
     # --- Game logic should go here
 
+
     # --- Drawing code should go here
-
-    # First, clear the screen to white. Don't put other drawing commands
-    # above this, or they will be erased with this command.
-    screen.fill(WHITE)
-
     screen.blit(background_image, [0, 0])
 
-    # Get the current mouse position. This returns the position
-    # as a list of two numbers.
+    # Call the update() method for all blocks in the block_list
+    all_sprites.update()
 
-    paper_ball.movex()
-    paper_ball.movey()
-
-
-
-    screen.blit(paper_ball.ball_sprite, [paper_ball.x, paper_ball.y])
+    # Update & display ball sprite
+    all_sprites.draw(screen)
 
 
 
@@ -134,6 +126,4 @@ while not done:
     clock.tick(60)
 
 # Close the window and quit.
-# If you forget this line, the program will 'hang'
-# on exit if running from IDLE.
 pygame.quit()
