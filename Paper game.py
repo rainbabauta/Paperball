@@ -16,6 +16,9 @@ size = (333, 700)
 screen = pygame.display.set_mode(size)
 background_image = pygame.image.load("room.jpg").convert()
 
+targetx = 140
+targety = 100
+
 change_pos = False
 
 class Ball(pygame.sprite.Sprite):
@@ -64,9 +67,11 @@ class Ball(pygame.sprite.Sprite):
 
 
 
+
 paper_ball = Ball()
 paper_ball.x = 139
 paper_ball.y = 600
+
 
 pygame.display.set_caption("Paperball")
 
@@ -111,7 +116,6 @@ while not done:
 
     # First, clear the screen to white. Don't put other drawing commands
     # above this, or they will be erased with this command.
-    screen.fill(WHITE)
 
     screen.blit(background_image, [0, 0])
 
@@ -120,6 +124,9 @@ while not done:
 
     paper_ball.movex()
     paper_ball.movey()
+
+    pygame.draw.rect(screen, BLACK, [targetx, targety, 50, 50])
+
 
 
 
