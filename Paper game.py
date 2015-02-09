@@ -9,6 +9,9 @@ WHITE    = ( 255, 255, 255)
 GREEN    = (   0, 255,   0)
 RED      = ( 255,   0,   0)
 
+GRAVITY = .04
+VELOCITY = 2.5
+
 pygame.init()
 
 # Set the width and height of the screen [width, height]
@@ -32,17 +35,29 @@ class Ball(pygame.sprite.Sprite):
         self.changex = 0
         self.changey = 0
         self.gravity = 0
+        self.distancex = 10
+        self.distancey = 100
+        self.collisionx = 0
+        self.collisiony = 0
 
         self.image = pygame.image.load("paper20.png").convert()
         self.image.set_colorkey(RED)
         self.rect = self.image.get_rect(center=(168,600))
 
-
+    def distance(self):
+        print "initial y = ", self.rect.y
+        self.distancex = self.distancex * self.changex
+        self.distancey = self.distancey * self.changey
+        self.collisionx = self.rect.x + self.distancex
+        self.collisiony = self.rect.y - self.distancey
+        print "initial distance y = ", self.distancey
+        print "initial collision y = ", self.collisiony
 
     def update(self):
         if change_pos == True:
-            print "yep"
             self.rect.x += self.changex
+            print "collision x = ", self.collisionx
+            print "x = ", self.rect.x
 
             if self.changex > 0:
                 if self.changex <= 0:
@@ -54,7 +69,13 @@ class Ball(pygame.sprite.Sprite):
                 if self.changex >= 0:
                     self.changex = 0
 
-            self.rect.y += self.changey
+            self.rect.y -= self.changey
+            print "collision y = ", self.collisiony
+            print "y = ", self.rect.y
+            print "gravity = ", self.gravity
+
+            if self.rect.y <= self.collisiony:
+                self.gravity += GRAVITY
 
             if self.changey > 0:
                 self.changey -= self.gravity
@@ -65,6 +86,7 @@ class Ball(pygame.sprite.Sprite):
                 if self.changey >= 0:
                     self.changey = 0
                     self.changex = 0
+
 
 
 paper_ball = Ball()
@@ -91,18 +113,19 @@ while not done:
             done = True # Flag that we are done so we exit this loop
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT and change_pos == False:
-                paper_ball.changex += 1
+                paper_ball.changex += VELOCITY
                 print "x = " + str(paper_ball.changex)
             if event.key == pygame.K_LEFT and change_pos == False:
-                paper_ball.changex -= 1
+                paper_ball.changex -= VELOCITY
                 print "x = " + str(paper_ball.changex)
             if event.key == pygame.K_UP and change_pos == False:
-                paper_ball.changey -= 1
+                paper_ball.changey += VELOCITY
                 print "y = " + str(paper_ball.changey)
             if event.key == pygame.K_DOWN and change_pos == False:
-                paper_ball.changey += 1
+                paper_ball.changey -= VELOCITY
                 print "y = " + str(paper_ball.changey)
             if event.key == pygame.K_SPACE:
+                paper_ball.distance()
                 change_pos = True
                 print "shoot"
 
