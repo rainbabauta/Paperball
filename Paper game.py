@@ -1,7 +1,6 @@
 import pygame
 import math
-#test
-#Leo rules
+
 
 # Define some colors
 BLACK    = (   0,   0,   0)
@@ -32,62 +31,60 @@ class Ball(pygame.sprite.Sprite):
         super(Ball, self).__init__()
         self.x = ""
         self.y = ""
-        self.changex = 0
-        self.changey = 0
+        self.change = [0,0]
         self.gravity = 0
-        self.distancex = 10
-        self.distancey = 100
-        self.collisionx = 0
-        self.collisiony = 0
+        self.distance = [10,100]
+        self.collision1 = [0,0]
+        self.collision2 = [0,0]
+        self.collision3 = [0,0]
+
 
         self.image = pygame.image.load("paper20.png").convert()
         self.image.set_colorkey(RED)
         self.rect = self.image.get_rect(center=(168,600))
 
-    def distance(self):
-        print "initial y = ", self.rect.y
-        self.distancex = self.distancex * self.changex
-        self.distancey = self.distancey * self.changey
-        self.collisionx = self.rect.x + self.distancex
-        self.collisiony = self.rect.y - self.distancey
-        print "initial distance y = ", self.distancey
-        print "initial collision y = ", self.collisiony
+    def calculate_collision(self):
+        self.distance[0] = self.distance[0] * self.change[0]
+        self.distance[1] = self.distance[1] * self.change[1]
+        self.collision1[0] = self.rect.x + self.distance[0]
+        self.collision1[1] = self.rect.y - self.distance[1]
+        print "initial distance y = ", self.distance[1]
+        print "initial collision y = ", self.collision1[1]
         # set 2 more collision points?
 
     def update(self):
         if change_pos == True:
-            self.rect.x += self.changex
-            print "collision x = ", self.collisionx
+            self.rect.x += self.change[0]
+            print "collision x = ", self.collision1[0]
             print "x = ", self.rect.x
 
-            if self.changex > 0:
-                if self.changex <= 0:
-                    self.changex = 0
-                self.changex -= self.gravity
+            if self.change[0] > 0:
+                if self.change[0] <= 0:
+                    self.change[0] = 0
+                self.change[0] -= self.gravity
 
-            elif self.changex < 0:
-                self.changex += self.gravity
-                if self.changex >= 0:
-                    self.changex = 0
+            elif self.change[0] < 0:
+                self.change[0] += self.gravity
+                if self.change[0] >= 0:
+                    self.change[0] = 0
 
-            self.rect.y -= self.changey
-            print "collision y = ", self.collisiony
+            self.rect.y -= self.change[1]
+            print "collision y = ", self.collision1[1]
             print "y = ", self.rect.y
             print "gravity = ", self.gravity
 
-            if self.rect.y <= self.collisiony:
+            if self.rect.y <= self.collision1[1]:
                 self.gravity += GRAVITY
                 # change to bounce
 
-            if self.changey > 0:
-                self.changey -= self.gravity
-                if self.changey <= 0:
-                    self.changey = 0
-            elif self.changey < 0:
-                self.changey += self.gravity
-                if self.changey >= 0:
-                    self.changey = 0
-                    self.changex = 0
+            if self.change[1] > 0:
+                self.change[1] -= self.gravity
+                if self.change[1] <= 0:
+                    self.change[1] = 0
+            elif self.change[1] < 0:
+                self.change[1] += self.gravity
+                if self.change[1] >= 0:
+                    self.change[1] = 0
 
 
 
@@ -115,19 +112,19 @@ while not done:
             done = True # Flag that we are done so we exit this loop
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT and change_pos == False:
-                paper_ball.changex += VELOCITY
-                print "x = " + str(paper_ball.changex)
+                paper_ball.change[0] += VELOCITY
+                print "x = " + str(paper_ball.change[0])
             if event.key == pygame.K_LEFT and change_pos == False:
-                paper_ball.changex -= VELOCITY
-                print "x = " + str(paper_ball.changex)
+                paper_ball.change[0] -= VELOCITY
+                print "x = " + str(paper_ball.change[0])
             if event.key == pygame.K_UP and change_pos == False:
-                paper_ball.changey += VELOCITY
-                print "y = " + str(paper_ball.changey)
+                paper_ball.change[1] += VELOCITY
+                print "y = " + str(paper_ball.change[1])
             if event.key == pygame.K_DOWN and change_pos == False:
-                paper_ball.changey -= VELOCITY
-                print "y = " + str(paper_ball.changey)
+                paper_ball.change[1] -= VELOCITY
+                print "y = " + str(paper_ball.change[1])
             if event.key == pygame.K_SPACE:
-                paper_ball.distance()
+                paper_ball.calculate_collision()
                 change_pos = True
                 print "shoot"
 
