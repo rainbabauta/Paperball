@@ -66,7 +66,7 @@ class Ball(pygame.sprite.Sprite):
 
 paper_ball = Ball()
 paper_ball.x = 139
-paper_ball.y = 200
+paper_ball.y = 600
 
 pygame.display.set_caption("Paperball")
 
