@@ -52,6 +52,7 @@ class Ball(pygame.sprite.Sprite):
         self.collisiony = self.rect.y - self.distancey
         print "initial distance y = ", self.distancey
         print "initial collision y = ", self.collisiony
+        # set 2 more collision points?
 
     def update(self):
         if change_pos == True:
@@ -76,6 +77,7 @@ class Ball(pygame.sprite.Sprite):
 
             if self.rect.y <= self.collisiony:
                 self.gravity += GRAVITY
+                # change to bounce
 
             if self.changey > 0:
                 self.changey -= self.gravity
