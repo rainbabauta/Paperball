@@ -8,8 +8,8 @@ WHITE    = ( 255, 255, 255)
 GREEN    = (   0, 255,   0)
 RED      = ( 255,   0,   0)
 
-GRAVITY = .04
-VELOCITY = 2.5
+GRAVITY = .001
+VELOCITY = 5
 
 pygame.init()
 
@@ -31,60 +31,79 @@ class Ball(pygame.sprite.Sprite):
         super(Ball, self).__init__()
         self.x = ""
         self.y = ""
+
+        # Initialize some variables
         self.change = [0,0]
-        self.gravity = 0
-        self.distance = [10,100]
+        self.gravity = [0,0]
+        self.distance = [10,70]
         self.collision1 = [0,0]
         self.collision2 = [0,0]
         self.collision3 = [0,0]
-
+        self.bounce = False
+        self.bounce_done = 0
 
         self.image = pygame.image.load("paper20.png").convert()
         self.image.set_colorkey(RED)
         self.rect = self.image.get_rect(center=(168,600))
 
     def calculate_collision(self):
+        # Calculate distance to 1st collision point
         self.distance[0] = self.distance[0] * self.change[0]
         self.distance[1] = self.distance[1] * self.change[1]
+        # Calculate 1st collision point
         self.collision1[0] = self.rect.x + self.distance[0]
         self.collision1[1] = self.rect.y - self.distance[1]
         print "initial distance y = ", self.distance[1]
         print "initial collision y = ", self.collision1[1]
-        # set 2 more collision points?
+
+        # Set 2nd collision point
+        self.collision2[0] = self.collision1[0] - 40
+        self.collision2[1] = self.collision1[1] - 40
+        print "2nd collision point = ", self.collision2
+
+
+        # Set 3rd collision point
+        self.collision3[0] = self.collision2[0] - 20
+        self.collision3[1] = self.collision2[1] - 20
+        print "3rd collision point = ", self.collision3
+
 
     def update(self):
         if change_pos == True:
-            self.rect.x += self.change[0]
-            print "collision x = ", self.collision1[0]
-            print "x = ", self.rect.x
 
+            # Test if hit 1st collision point
+            print "collision1 x = ", self.collision1[0]
+            if self.rect.x >= self.collision1[0]:
+                self.gravity[0] += GRAVITY*3
+
+            print "collision1 y = ", self.collision1[1]
+            if self.rect.y <= self.collision1[1]:
+                self.gravity[1] += GRAVITY*3
+                self.bounce = True
+
+            # Bounce
+            if self.bounce == True:
+                if self.change[0] <= 1:
+                    self.change[0] += 1
+                self.bounce_done += 1
+                print "self.bounce_done = ", self.bounce_done
+                if self.bounce_done >= 2:
+                    self.gravity[0] = 1000
+
+            # Change position
+            self.rect.x += self.change[0]
+            self.rect.y -= self.change[1]
+
+            # Update change by gravity
             if self.change[0] > 0:
+                self.change[0] -= self.gravity[0]
                 if self.change[0] <= 0:
                     self.change[0] = 0
-                self.change[0] -= self.gravity
-
-            elif self.change[0] < 0:
-                self.change[0] += self.gravity
-                if self.change[0] >= 0:
-                    self.change[0] = 0
-
-            self.rect.y -= self.change[1]
-            print "collision y = ", self.collision1[1]
-            print "y = ", self.rect.y
-            print "gravity = ", self.gravity
-
-            if self.rect.y <= self.collision1[1]:
-                self.gravity += GRAVITY
-                # change to bounce
-
             if self.change[1] > 0:
-                self.change[1] -= self.gravity
+                self.change[1] -= self.gravity[1]
                 if self.change[1] <= 0:
                     self.change[1] = 0
-            elif self.change[1] < 0:
-                self.change[1] += self.gravity
-                if self.change[1] >= 0:
-                    self.change[1] = 0
+
 
 
 
