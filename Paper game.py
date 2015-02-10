@@ -11,7 +11,7 @@ RED      = ( 255,   0,   0)
 
 GRAVITY = .0005
 VELOCITY = 5
-FORCE_MULTIPLIER = 50
+FORCE_MULTIPLIER = 60
 
 pygame.init()
 
@@ -44,7 +44,11 @@ class Ball(pygame.sprite.Sprite):
 
 
         self.bounce = False
+        self.bounce2 = False
+        self.bounce_pause = 0
+        self.bounce_pause2 = 0
         self.bounce_length = 0
+        self.bounce_length2 = 0
         self.bounce_done = False
 
         self.image = pygame.image.load("paper20.png").convert()
@@ -77,20 +81,37 @@ class Ball(pygame.sprite.Sprite):
             if self.rect.y <= self.collision1[1]:
                 self.bounce = True
 
-            # Bounce
-
+            # Bounce 1
             if self.bounce == True and self.bounce_done == False:
-                self.rect.x += 10
-                self.rect.y -= 10
-                self.bounce_length += 1
-                print "self.bounce_done = ", self.bounce_done
-                if self.bounce_done >= 10:
+                if self.bounce_pause < 20:
+                    self.bounce_pause += 1
+                else:
+                    self.rect.x += 2
+                    self.rect.y -= 3
+                    self.bounce_length += 1
+                
+                if self.bounce_length >= 30:
+                    self.bounce = False
+                    self.bounce2 = True
+
+
+            # Bounce 2
+            if self.bounce2 == True and self.bounce_done == False:
+                if self.bounce_pause2 < 20:
+                    self.bounce_pause2 += 1
+                else:
+                    self.rect.x += 2
+                    self.rect.y -= .5
+                    self.bounce_length2 += 1
+
+                if self.bounce_length2 >= 20:
                     self.bounce_done = True
+                    print "done"
 
             # Change position
-            if self.bounce == False and self.bounce_done == False:
-                self.rect.x += VELOCITY
-                self.rect.y -= VELOCITY
+            if self.bounce == False and self.bounce2 == False and self.bounce_done == False:
+                self.rect.x += VELOCITY * self.force[0]
+                self.rect.y -= VELOCITY * self.force[1]
 
 
     def target_collision(self):
@@ -103,6 +124,7 @@ class Ball(pygame.sprite.Sprite):
         elif targetx + 17 <= (self.collision1[0] + 7) and (self.collision1[0] + 7) <= targetx + 67 and targety + 15<= (self.collision1[1] + 48) and (self.collision1[1] + 48) <= targety + 65:
             hit_target = True
         elif targetx + 17 <= (self.collision1[0] + 52) and (self.collision1[0] + 52) <= targetx + 67 and targety + 15<= (self.collision1[1] + 48) and (self.collision1[1] + 48) <= targety + 65:
+
             hit_target = True
 
 
