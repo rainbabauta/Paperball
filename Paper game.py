@@ -21,6 +21,8 @@ background_image = pygame.image.load("room.jpg").convert()
 
 targetx = 140
 targety = 100
+target_center = (targetx + 25, targety + 25)
+
 
 
 change_pos = False
@@ -44,7 +46,8 @@ class Ball(pygame.sprite.Sprite):
 
         self.image = pygame.image.load("paper20.png").convert()
         self.image.set_colorkey(RED)
-        self.rect = self.image.get_rect(center=(168,600))
+        self.rect = self.image.get_rect(center=(148,600))
+        print self.rect
 
     def calculate_collision(self):
         # Calculate distance to 1st collision point
@@ -94,23 +97,31 @@ class Ball(pygame.sprite.Sprite):
             self.rect.x += self.change[0]
             self.rect.y -= self.change[1]
 
+
             # Update change by gravity
             if self.change[0] > 0:
                 self.change[0] -= self.gravity[0]
                 if self.change[0] <= 0:
                     self.change[0] = 0
+
             if self.change[1] > 0:
                 self.change[1] -= self.gravity[1]
                 if self.change[1] <= 0:
                     self.change[1] = 0
 
-
+    def target_collision(self):
+        self.center = (self.rect[0] + 28, self.rect[1] + 24)
+        if targetx <= (self.center[0] - 28) and (self.center[0] - 28) <= targetx + 50 and targety <= (self.center[1] - 24) and (self.center[1] - 24) <= targety + 50:
+            print "yes 1"
+        elif targetx <= (self.center[0] + 28) and (self.center[0] + 28) <= targetx + 50 and targety <= (self.center[1] - 24) and (self.center[1] - 24) <= targety + 50:
+            print "yes 2"
+        
+        
 
 
 paper_ball = Ball()
 paper_ball.x = 139
 paper_ball.y = 600
-
 all_sprites = pygame.sprite.Group()
 all_sprites.add(paper_ball)
 
@@ -145,7 +156,6 @@ while not done:
             if event.key == pygame.K_SPACE:
                 paper_ball.calculate_collision()
                 change_pos = True
-                print "shoot"
 
 
     # --- Game logic should go here
@@ -164,6 +174,7 @@ while not done:
     # Update & display ball sprite
     all_sprites.draw(screen)
 
+    paper_ball.target_collision()
 
     # --- Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
