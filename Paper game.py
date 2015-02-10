@@ -41,6 +41,7 @@ class Ball(pygame.sprite.Sprite):
         self.force = [0,0]
         self.distance = [10,20]
         self.collision1 = [0,0]
+        self.hit_target = False
 
 
         self.bounce = False
@@ -83,7 +84,7 @@ class Ball(pygame.sprite.Sprite):
 
             # Bounce 1
             if self.bounce == True and self.bounce_done == False:
-                if self.bounce_pause < 20:
+                if self.bounce_pause < 10:
                     self.bounce_pause += 1
                 else:
                     self.rect.x += 2
@@ -118,14 +119,15 @@ class Ball(pygame.sprite.Sprite):
         self.center = (self.rect[0] + 28, self.rect[1] + 24)
 
         if targetx + 17 <= (self.collision1[0] + 7) and (self.collision1[0] + 7) <= targetx + 67 and targety + 15 <= (self.collision1[1] + 4) and (self.collision1[1] + 4) <= targety + 65:
-            hit_target = True
+            self.hit_target = True
         elif targetx + 17 <= (self.collision1[0] + 52) and (self.collision1[0] + 52) <= targetx + 67 and targety + 15<= (self.collision1[1] + 4) and (self.collision1[1] + 4) <= targety + 65:
-            hit_target = True
+            self.hit_target = True
         elif targetx + 17 <= (self.collision1[0] + 7) and (self.collision1[0] + 7) <= targetx + 67 and targety + 15<= (self.collision1[1] + 48) and (self.collision1[1] + 48) <= targety + 65:
-            hit_target = True
+            self.hit_target = True
         elif targetx + 17 <= (self.collision1[0] + 52) and (self.collision1[0] + 52) <= targetx + 67 and targety + 15<= (self.collision1[1] + 48) and (self.collision1[1] + 48) <= targety + 65:
-
-            hit_target = True
+            self.hit_target = True
+        if self.hit_target == True:
+            print "Yay!"
 
 
 paper_ball = Ball()
@@ -183,9 +185,8 @@ while not done:
 
 
     # Update & display ball sprite
-    all_sprites.draw(screen)
-
     screen.blit(turtle, [targetx, targety])
+    all_sprites.draw(screen)
 
     paper_ball.target_collision()
 
