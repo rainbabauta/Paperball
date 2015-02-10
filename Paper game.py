@@ -21,7 +21,7 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Paperball")
 background_image = pygame.image.load("room.jpg").convert()
 
-targetx = 140
+targetx = 116
 targety = 100
 
 
@@ -96,10 +96,13 @@ class Ball(pygame.sprite.Sprite):
     def target_collision(self):
         self.center = (self.rect[0] + 28, self.rect[1] + 24)
 
-        if targetx <= (self.collision1[0] + 7) and (self.collision1[0] + 7) <= targetx + 50 and targety <= (self.collision1[1] + 4) and (self.collision1[1] + 4) <= targety + 50:
-        elif targetx <= (self.collision1[0] + 52) and (self.collision1[0] + 52) <= targetx + 50 and targety <= (self.collision1[1] + 4) and (self.collision1[1] + 4) <= targety + 50:
-        elif targetx <= (self.collision1[0] + 7) and (self.collision1[0] + 7) <= targetx + 50 and targety <= (self.collision1[1] + 48) and (self.collision1[1] + 48) <= targety + 50:
-        elif targetx <= (self.collision1[0] + 52) and (self.collision1[0] + 52) <= targetx + 50 and targety <= (self.collision1[1] + 48) and (self.collision1[1] + 48) <= targety + 50:
+        if targetx + 17 <= (self.collision1[0] + 7) and (self.collision1[0] + 7) <= targetx + 67 and targety + 15 <= (self.collision1[1] + 4) and (self.collision1[1] + 4) <= targety + 65:
+            hit_target = True
+        elif targetx + 17 <= (self.collision1[0] + 52) and (self.collision1[0] + 52) <= targetx + 67 and targety + 15<= (self.collision1[1] + 4) and (self.collision1[1] + 4) <= targety + 65:
+            hit_target = True
+        elif targetx + 17 <= (self.collision1[0] + 7) and (self.collision1[0] + 7) <= targetx + 67 and targety + 15<= (self.collision1[1] + 48) and (self.collision1[1] + 48) <= targety + 65:
+            hit_target = True
+        elif targetx + 17 <= (self.collision1[0] + 52) and (self.collision1[0] + 52) <= targetx + 67 and targety + 15<= (self.collision1[1] + 48) and (self.collision1[1] + 48) <= targety + 65:
             hit_target = True
 
 
@@ -108,6 +111,9 @@ paper_ball.x = 139
 paper_ball.y = 600
 all_sprites = pygame.sprite.Group()
 all_sprites.add(paper_ball)
+
+turtle = pygame.image.load("turtle100.png").convert()
+turtle.set_colorkey(BLACK)
 
 
 # Loop until the user clicks the close button.
@@ -148,7 +154,6 @@ while not done:
     # --- Drawing code should go here
     screen.blit(background_image, [0, 0])
 
-    pygame.draw.rect(screen, BLACK, [targetx, targety, 50, 50])
 
     # Call the update() method for all blocks in the block_list
     all_sprites.update()
@@ -157,6 +162,8 @@ while not done:
 
     # Update & display ball sprite
     all_sprites.draw(screen)
+
+    screen.blit(turtle, [targetx, targety])
 
     paper_ball.target_collision()
 
