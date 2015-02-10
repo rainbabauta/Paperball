@@ -1,3 +1,15 @@
+# Todo:
+# - fix flicker
+# - make turtle class
+# - fix bounce animation
+# - reset game function
+# - Show text if you hit target
+# - Show score
+# - Have shooter animation
+# - Add sound
+# - Animate turtle
+
+
 import pygame
 import math
 
