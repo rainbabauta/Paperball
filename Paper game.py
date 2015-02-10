@@ -8,6 +8,7 @@ WHITE    = ( 255, 255, 255)
 GREEN    = (   0, 255,   0)
 RED      = ( 255,   0,   0)
 
+
 GRAVITY = .0005
 VELOCITY = 5
 FORCE_MULTIPLIER = 50
@@ -22,7 +23,6 @@ background_image = pygame.image.load("room.jpg").convert()
 
 targetx = 140
 targety = 100
-target_center = (targetx + 25, targety + 25)
 
 
 
@@ -49,8 +49,9 @@ class Ball(pygame.sprite.Sprite):
 
         self.image = pygame.image.load("paper20.png").convert()
         self.image.set_colorkey(RED)
-        self.rect = self.image.get_rect(center=(148,600))
-        print self.rect
+        self.rect = self.image.get_rect(center=(168,600))
+        print self.rect.x
+        print self.rect.y
 
     def calculate_collision(self):
         # Calculate distance to 1st collision point
@@ -67,15 +68,17 @@ class Ball(pygame.sprite.Sprite):
         if change_pos == True:
 
             # Test if hit 1st collision point
+
             # print "collision1 x = ", self.collision1[0]
             # if self.rect.x >= self.collision1[0]:
             #     self.gravity[0] += GRAVITY*3
 
-            print "collision1 y = ", self.collision1[1]
+            #print "collision1 y = ", self.collision1[1]
             if self.rect.y <= self.collision1[1]:
                 self.bounce = True
 
             # Bounce
+
             if self.bounce == True and self.bounce_done == False:
                 self.rect.x += 10
                 self.rect.y -= 10
@@ -92,12 +95,12 @@ class Ball(pygame.sprite.Sprite):
 
     def target_collision(self):
         self.center = (self.rect[0] + 28, self.rect[1] + 24)
-        if targetx <= (self.center[0] - 28) and (self.center[0] - 28) <= targetx + 50 and targety <= (self.center[1] - 24) and (self.center[1] - 24) <= targety + 50:
-            print "yes 1"
-        elif targetx <= (self.center[0] + 28) and (self.center[0] + 28) <= targetx + 50 and targety <= (self.center[1] - 24) and (self.center[1] - 24) <= targety + 50:
-            print "yes 2"
-        
-        
+
+        if targetx <= (self.collision1[0] + 7) and (self.collision1[0] + 7) <= targetx + 50 and targety <= (self.collision1[1] + 4) and (self.collision1[1] + 4) <= targety + 50:
+        elif targetx <= (self.collision1[0] + 52) and (self.collision1[0] + 52) <= targetx + 50 and targety <= (self.collision1[1] + 4) and (self.collision1[1] + 4) <= targety + 50:
+        elif targetx <= (self.collision1[0] + 7) and (self.collision1[0] + 7) <= targetx + 50 and targety <= (self.collision1[1] + 48) and (self.collision1[1] + 48) <= targety + 50:
+        elif targetx <= (self.collision1[0] + 52) and (self.collision1[0] + 52) <= targetx + 50 and targety <= (self.collision1[1] + 48) and (self.collision1[1] + 48) <= targety + 50:
+            hit_target = True
 
 
 paper_ball = Ball()
