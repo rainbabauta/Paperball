@@ -1,3 +1,16 @@
+# Todo:
+# - fix flicker
+# - make turtle class
+# - fix bounce animation
+# - reset game function
+# - Show text if you hit target
+# - Show score
+# - Have shooter animation
+# - Add x axis collision point code to Ball update
+# - Add sound
+# - Animate turtle
+
+
 import pygame
 import math
 
@@ -8,8 +21,6 @@ WHITE    = ( 255, 255, 255)
 GREEN    = (   0, 255,   0)
 RED      = ( 255,   0,   0)
 
-
-GRAVITY = .0005
 VELOCITY = 5
 FORCE_MULTIPLIER = 60
 
@@ -21,10 +32,8 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Paperball")
 background_image = pygame.image.load("room.jpg").convert()
 
-targetx = 140
+targetx = 116
 targety = 100
-
-
 
 change_pos = False
 
@@ -37,10 +46,10 @@ class Ball(pygame.sprite.Sprite):
 
         # Initialize some variables
         self.change = [0,0]
-        self.gravity = [0,0]
         self.force = [0,0]
         self.distance = [10,20]
         self.collision1 = [0,0]
+        self.hit_target = False
 
 
         self.bounce = False
@@ -67,7 +76,6 @@ class Ball(pygame.sprite.Sprite):
         self.collision1[1] = self.rect.y - self.distance[1]
 
 
-
     def update(self):
         if change_pos == True:
 
@@ -83,7 +91,7 @@ class Ball(pygame.sprite.Sprite):
 
             # Bounce 1
             if self.bounce == True and self.bounce_done == False:
-                if self.bounce_pause < 20:
+                if self.bounce_pause < 10:
                     self.bounce_pause += 1
                 else:
                     self.rect.x += 2
@@ -93,7 +101,6 @@ class Ball(pygame.sprite.Sprite):
                 if self.bounce_length >= 30:
                     self.bounce = False
                     self.bounce2 = True
-
 
             # Bounce 2
             if self.bounce2 == True and self.bounce_done == False:
@@ -117,14 +124,16 @@ class Ball(pygame.sprite.Sprite):
     def target_collision(self):
         self.center = (self.rect[0] + 28, self.rect[1] + 24)
 
-        if targetx <= (self.collision1[0] + 7) and (self.collision1[0] + 7) <= targetx + 50 and targety <= (self.collision1[1] + 4) and (self.collision1[1] + 4) <= targety + 50:
-            hit_target = True
-        elif targetx <= (self.collision1[0] + 52) and (self.collision1[0] + 52) <= targetx + 50 and targety <= (self.collision1[1] + 4) and (self.collision1[1] + 4) <= targety + 50:
-            hit_target = True
-        elif targetx <= (self.collision1[0] + 7) and (self.collision1[0] + 7) <= targetx + 50 and targety <= (self.collision1[1] + 48) and (self.collision1[1] + 48) <= targety + 50:
-            hit_target = True
-        elif targetx <= (self.collision1[0] + 52) and (self.collision1[0] + 52) <= targetx + 50 and targety <= (self.collision1[1] + 48) and (self.collision1[1] + 48) <= targety + 50:
-            hit_target = True
+        if targetx + 17 <= (self.collision1[0] + 7) and (self.collision1[0] + 7) <= targetx + 67 and targety + 15 <= (self.collision1[1] + 4) and (self.collision1[1] + 4) <= targety + 65:
+            self.hit_target = True
+        elif targetx + 17 <= (self.collision1[0] + 52) and (self.collision1[0] + 52) <= targetx + 67 and targety + 15<= (self.collision1[1] + 4) and (self.collision1[1] + 4) <= targety + 65:
+            self.hit_target = True
+        elif targetx + 17 <= (self.collision1[0] + 7) and (self.collision1[0] + 7) <= targetx + 67 and targety + 15<= (self.collision1[1] + 48) and (self.collision1[1] + 48) <= targety + 65:
+            self.hit_target = True
+        elif targetx + 17 <= (self.collision1[0] + 52) and (self.collision1[0] + 52) <= targetx + 67 and targety + 15<= (self.collision1[1] + 48) and (self.collision1[1] + 48) <= targety + 65:
+            self.hit_target = True
+        if self.hit_target == True:
+            print "Yay!"
 
 
 paper_ball = Ball()
@@ -133,6 +142,9 @@ paper_ball.y = 600
 all_sprites = pygame.sprite.Group()
 all_sprites.add(paper_ball)
 
+turtle = pygame.image.load("turtle100.png").convert()
+turtle.set_colorkey(BLACK)
+
 
 # Loop until the user clicks the close button.
 done = False
@@ -140,6 +152,33 @@ done = False
 
 # Used to manage how fast the screen updates
 clock = pygame.time.Clock()
+
+
+def setup():
+    # Initialize ball's variables
+    paper_ball.kill()
+    paper_ball.rect.x = 139
+    paper_ball.rect.y = 600
+    paper_ball.change = [0,0]
+    paper_ball.gravity = [0,0]
+    paper_ball.force = [0,0]
+    paper_ball.distance = [10,20]
+    paper_ball.collision1 = [0,0]
+    paper_ball.hit_target = False
+
+    paper_ball.bounce = False
+    paper_ball.bounce2 = False
+    paper_ball.bounce_pause = 0
+    paper_ball.bounce_pause2 = 0
+    paper_ball.bounce_length = 0
+    paper_ball.bounce_length2 = 0
+    paper_ball.bounce_done = False
+    all_sprites.add(paper_ball)
+    change_pos = False
+    print paper_ball.rect.x
+    print paper_ball.rect.y
+
+    return
 
 # -------- Main Program Loop -----------
 while not done:
@@ -165,21 +204,27 @@ while not done:
                 paper_ball.calculate_collision()
                 change_pos = True
 
+            # Reset game button
+            if event.key == pygame.K_TAB:
+                print "Game reset!"
+                setup()
+
 
     # --- Game logic should go here
 
 
     # --- Drawing code should go here
+
+
     screen.blit(background_image, [0, 0])
 
-    pygame.draw.rect(screen, BLACK, [targetx, targety, 50, 50])
 
     # Call the update() method for all blocks in the block_list
     all_sprites.update()
 
 
-
     # Update & display ball sprite
+    screen.blit(turtle, [targetx, targety])
     all_sprites.draw(screen)
 
     paper_ball.target_collision()
@@ -190,5 +235,7 @@ while not done:
     # --- Limit to 60 frames per second
     clock.tick(60)
 
+
 # Close the window and quit.
 pygame.quit()
+    
