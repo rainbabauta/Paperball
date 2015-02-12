@@ -2,13 +2,15 @@
 # - fix flicker
 # - make turtle class
 # - fix bounce animation
-# - reset game function
 # - Show text if you hit target
 # - Show score
 # - Have shooter animation
 # - Add x axis collision point code to Ball update
 # - Add sound
 # - Animate turtle
+
+# DONE
+# - reset game function
 
 
 import pygame
@@ -36,7 +38,7 @@ targetx = 116
 targety = 100
 
 change_pos = False
-
+mouse_down = False
 
 class Ball(pygame.sprite.Sprite):
     def __init__(self):
@@ -135,11 +137,35 @@ class Ball(pygame.sprite.Sprite):
             print "Yay!"
 
 
+class Launcher(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Launcher, self).__init__()
+        self.width = 60
+        self.height = 15
+
+        # Create an image of the block, and fill it with a color.
+        # This could also be an image loaded from the disk.
+        self.image = pygame.Surface([self.width, self.height])
+        self.image.fill(BLACK)
+
+        # Fetch the rectangle object that has the dimensions of the image
+        # Update the position of this object by setting the values of rect.x and rect.y
+        self.rect = self.image.get_rect(center=(168,550))
+
+    def update(self):
+        pass
+
+
+
+
+
 paper_ball = Ball()
-paper_ball.x = 139
-paper_ball.y = 600
+ball_launcher = Launcher()
+
+
 all_sprites = pygame.sprite.Group()
 all_sprites.add(paper_ball)
+all_sprites.add(ball_launcher)
 
 turtle = pygame.image.load("turtle100.png").convert()
 turtle.set_colorkey(BLACK)
@@ -205,7 +231,17 @@ while not done:
             # Reset game button
             if event.key == pygame.K_TAB:
                 setup()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            print "mouse button down at (%d, %d)" % event.pos
+            mouse_down = True
+            
+        elif event.type == pygame.MOUSEBUTTONUP:
+            print "mouse button up at (%d, %d)" % event.pos
+            mouse_down = False
 
+        if event.type == pygame.MOUSEMOTION and mouse_down == True:
+            ball_launcher.rect.x = event.pos[0] - ball_launcher.width/2
+            ball_launcher.rect.y = event.pos[1] - ball_launcher.height/2
 
     # --- Game logic should go here
 
