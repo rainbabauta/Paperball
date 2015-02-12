@@ -113,7 +113,6 @@ class Ball(pygame.sprite.Sprite):
 
                 if self.bounce_length2 >= 20:
                     self.bounce_done = True
-                    print "done"
 
             # Change position
             if self.bounce == False and self.bounce2 == False and self.bounce_done == False:
@@ -156,6 +155,8 @@ clock = pygame.time.Clock()
 
 def setup():
     # Initialize ball's variables
+    global change_pos
+    change_pos = False
     paper_ball.kill()
     paper_ball.rect.x = 139
     paper_ball.rect.y = 600
@@ -174,11 +175,8 @@ def setup():
     paper_ball.bounce_length2 = 0
     paper_ball.bounce_done = False
     all_sprites.add(paper_ball)
-    change_pos = False
-    print paper_ball.rect.x
-    print paper_ball.rect.y
 
-    return
+
 
 # -------- Main Program Loop -----------
 while not done:
@@ -200,13 +198,12 @@ while not done:
             if event.key == pygame.K_DOWN and change_pos == False:
                 paper_ball.force[1] -= 1
                 print "y = " + str(paper_ball.force[1])
-            if event.key == pygame.K_SPACE:
+            if event.key == pygame.K_SPACE and change_pos == False:
                 paper_ball.calculate_collision()
                 change_pos = True
 
             # Reset game button
             if event.key == pygame.K_TAB:
-                print "Game reset!"
                 setup()
 
 
