@@ -39,6 +39,11 @@ targety = 100
 
 change_pos = False
 mouse_down = False
+launch1 = [0,0]
+launch2 = [0,0]
+
+
+
 
 class Ball(pygame.sprite.Sprite):
     def __init__(self):
@@ -234,16 +239,25 @@ while not done:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             print "mouse button down at (%d, %d)" % event.pos
             mouse_down = True
-            
+            launch1[0] = event.pos[0]
+            launch1[1] = event.pos[1]
+
         elif event.type == pygame.MOUSEBUTTONUP:
             print "mouse button up at (%d, %d)" % event.pos
             mouse_down = False
+            paper_ball.force[1] += (launch2[1] - launch1[1])/14
+            print "force y = ", paper_ball.force[1] 
+            paper_ball.calculate_collision()
+            change_pos = True
+
 
         if event.type == pygame.MOUSEMOTION and mouse_down == True:
             ball_launcher.rect.x = event.pos[0] - ball_launcher.width/2
             ball_launcher.rect.y = event.pos[1] - ball_launcher.height/2
             paper_ball.rect.x = event.pos[0] - ball_launcher.width/2
             paper_ball.rect.y = event.pos[1] - 55
+            launch2[0] = event.pos[0]
+            launch2[1] = event.pos[1]
 
     # --- Game logic should go here
 
