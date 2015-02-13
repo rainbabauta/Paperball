@@ -1,16 +1,16 @@
 # Todo:
 # - fix flicker
-# - make turtle class
-# - fix bounce animation
-# - Show text if you hit target
-# - Show score
-# - Have shooter animation
-# - Add x axis collision point code to Ball update
+# - make turtle class - Rain
+# - fix bounce animation - Dad
+# - Show text if you hit target - Rain
+# - Show score - Rain
+# - Have shooter animation - Dad
+# - Add x axis collision point code to Ball update - Dad
 # - Add sound
-# - Animate turtle
+# - Animate turtle - Rain
 
 # DONE
-# - reset game function
+# - reset game function - Dad
 
 
 import pygame
@@ -242,6 +242,8 @@ while not done:
         if event.type == pygame.MOUSEMOTION and mouse_down == True:
             ball_launcher.rect.x = event.pos[0] - ball_launcher.width/2
             ball_launcher.rect.y = event.pos[1] - ball_launcher.height/2
+            paper_ball.rect.x = event.pos[0] - ball_launcher.width/2
+            paper_ball.rect.y = event.pos[1] - 55
 
     # --- Game logic should go here
 
