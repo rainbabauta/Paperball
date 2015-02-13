@@ -69,7 +69,7 @@ class Ball(pygame.sprite.Sprite):
 
         self.image = pygame.image.load("paper20.png").convert()
         self.image.set_colorkey(RED)
-        self.rect = self.image.get_rect(center=(168,600))
+        self.rect = self.image.get_rect(center=(168,520))
         print self.rect.x
         print self.rect.y
 
