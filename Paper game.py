@@ -2,15 +2,17 @@
 # - fix flicker
 # - make turtle class - Rain
 # - fix bounce animation - Dad
+# - Have launcher only move when you click on it - Dad
+# - Add rubber bands to launcher - Dad
 # - Show text if you hit target - Rain
 # - Show score - Rain
-# - Have shooter animation - Dad
 # - Add x axis collision point code to Ball update - Dad
 # - Add sound
 # - Animate turtle - Rain
 
 # DONE
 # - reset game function - Dad
+# - Create launcher - Dad
 
 
 import pygame
@@ -48,8 +50,6 @@ launch2 = [0,0]
 class Ball(pygame.sprite.Sprite):
     def __init__(self):
         super(Ball, self).__init__()
-        self.x = ""
-        self.y = ""
 
         # Initialize some variables
         self.change = [0,0]
@@ -57,6 +57,7 @@ class Ball(pygame.sprite.Sprite):
         self.distance = [10,20]
         self.collision1 = [0,0]
         self.hit_target = False
+        self.start = [168,520]
 
 
         self.bounce = False
@@ -69,9 +70,10 @@ class Ball(pygame.sprite.Sprite):
 
         self.image = pygame.image.load("paper20.png").convert()
         self.image.set_colorkey(RED)
-        self.rect = self.image.get_rect(center=(168,520))
+        self.rect = self.image.get_rect(center=(self.start))
         print self.rect.x
         print self.rect.y
+        print self.rect.width
 
     def calculate_collision(self):
         # Calculate distance to 1st collision point
@@ -147,6 +149,8 @@ class Launcher(pygame.sprite.Sprite):
         super(Launcher, self).__init__()
         self.width = 60
         self.height = 15
+        self.return_start = False
+        self.start = [168,550]
 
         # Create an image of the block, and fill it with a color.
         # This could also be an image loaded from the disk.
@@ -155,11 +159,21 @@ class Launcher(pygame.sprite.Sprite):
 
         # Fetch the rectangle object that has the dimensions of the image
         # Update the position of this object by setting the values of rect.x and rect.y
-        self.rect = self.image.get_rect(center=(168,550))
+        self.rect = self.image.get_rect(center=(self.start))
 
     def update(self):
-        pass
+        if self.return_start == True:
+            if (self.rect.x + self.width/2) > self.start[0]:
+                self.rect.x -= 6
+            elif (self.rect.x - self.width/2) < self.start[0]:
+                self.rect.x += 6
+            
 
+
+            if (self.rect.y + self.height/2) > self.start[1]:
+                self.rect.y -= 6
+            elif (self.rect.y - self.height/2) < self.start[1]:
+                self.rect.y += 6
 
 
 
@@ -189,8 +203,8 @@ def setup():
     global change_pos
     change_pos = False
     paper_ball.kill()
-    paper_ball.rect.x = 139
-    paper_ball.rect.y = 600
+    paper_ball.rect.x = paper_ball.start[0]-paper_ball.rect.width/2
+    paper_ball.rect.y = paper_ball.start[1]-paper_ball.rect.height/2
     paper_ball.change = [0,0]
     paper_ball.gravity = [0,0]
     paper_ball.force = [0,0]
@@ -236,22 +250,29 @@ while not done:
             # Reset game button
             if event.key == pygame.K_TAB:
                 setup()
-        elif event.type == pygame.MOUSEBUTTONDOWN:
+        elif event.type == pygame.MOUSEBUTTONDOWN and \
+            (event.pos[0] > ball_launcher.rect.x and  \
+            event.pos[0] < (ball_launcher.rect.x + ball_launcher.width)) and \
+            (event.pos[1] > ball_launcher.rect.y and  \
+            event.pos[1] < (ball_launcher.rect.y + ball_launcher.height)):
             print "mouse button down at (%d, %d)" % event.pos
             mouse_down = True
             launch1[0] = event.pos[0]
             launch1[1] = event.pos[1]
 
-        elif event.type == pygame.MOUSEBUTTONUP:
+        elif event.type == pygame.MOUSEBUTTONUP and mouse_down == True:
             print "mouse button up at (%d, %d)" % event.pos
             mouse_down = False
             paper_ball.force[1] += (launch2[1] - launch1[1])/14
             print "force y = ", paper_ball.force[1] 
             paper_ball.calculate_collision()
             change_pos = True
+            ball_launcher.return_start = True
 
 
-        if event.type == pygame.MOUSEMOTION and mouse_down == True:
+        if event.type == pygame.MOUSEMOTION and \
+            mouse_down == True and \
+            event.pos[1] > 550:
             ball_launcher.rect.x = event.pos[0] - ball_launcher.width/2
             ball_launcher.rect.y = event.pos[1] - ball_launcher.height/2
             paper_ball.rect.x = event.pos[0] - ball_launcher.width/2
