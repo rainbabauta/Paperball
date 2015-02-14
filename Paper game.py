@@ -154,9 +154,9 @@ class Launcher(pygame.sprite.Sprite):
         self.height = 15
         self.return_start = False
         self.start = [168,550]
+        self.diff = [0,0]
 
         # Create an image of the block, and fill it with a color.
-        # This could also be an image loaded from the disk.
         self.image = pygame.Surface([self.width, self.height])
         self.image.fill(BLACK)
 
@@ -166,17 +166,26 @@ class Launcher(pygame.sprite.Sprite):
 
     def update(self):
         if self.return_start == True:
-            if (self.rect.x + self.width/2) > self.start[0]:
+            # Calculate distance to starting point
+            self.diff[0] = (self.rect.x + self.width/2) - self.start[0]
+            self.diff[1] = (self.rect.y + self.height/2) - self.start[1]
+
+            if self.diff[0] > 6:
                 self.rect.x -= 6
-            elif (self.rect.x - self.width/2) < self.start[0]:
+            elif self.diff[0] > 0:
+                self.rect.x -= self.diff[0]
+            elif self.diff[0] < -6:
                 self.rect.x += 6
+            elif self.diff[0] < 0:
+                self.rect.x -= self.diff[0]
+
+            if self.diff[1] > 6:
+                self.rect.y -= 6
+            elif self.diff[1] > 0:
+                self.rect.y -= self.diff[1]
             
 
 
-            if (self.rect.y + self.height/2) > self.start[1]:
-                self.rect.y -= 6
-            elif (self.rect.y - self.height/2) < self.start[1]:
-                self.rect.y += 6
 
 class Turtle(pygame.sprite.Sprite):
 
@@ -236,6 +245,8 @@ def setup():
     paper_ball.bounce_length = 0
     paper_ball.bounce_length2 = 0
     paper_ball.bounce_done = False
+    ball_launcher.return_start = False
+
     all_sprites.add(paper_ball)
 
 
@@ -274,6 +285,8 @@ while not done:
             event.pos[1] < (ball_launcher.rect.y + ball_launcher.height)):
             print "mouse button down at (%d, %d)" % event.pos
             mouse_down = True
+            if ball_launcher.return_start == True:
+                setup()
             launch1[0] = event.pos[0]
             launch1[1] = event.pos[1]
 
