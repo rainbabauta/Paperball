@@ -195,12 +195,14 @@ class Turtle(pygame.sprite.Sprite):
         self.image = pygame.image.load("turtle100.png").convert()
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect(center=(self.start))
-        changetargetx = 0
-        changetargety = 0
+        self.changetargetx = 0
+        self.changetargety = 0
+        self.targetx = 0
+        self.targety = 0
 
     def update(self):
-        targetx += changetargetx
-        targety += changetargety
+        self.targetx += self.changetargetx
+        self.targety += self.changetargety
 
   
 
