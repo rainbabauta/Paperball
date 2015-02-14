@@ -36,7 +36,7 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Paperball")
 background_image = pygame.image.load("room.jpg").convert()
 
-targetx = 116
+targetx = 169
 targety = 100
 
 change_pos = False
@@ -128,7 +128,6 @@ class Ball(pygame.sprite.Sprite):
                 self.rect.x += VELOCITY * self.force[0]
                 self.rect.y -= VELOCITY * self.force[1]
 
-
     def target_collision(self):
         self.center = (self.rect[0] + 28, self.rect[1] + 24)
 
@@ -142,6 +141,10 @@ class Ball(pygame.sprite.Sprite):
             self.hit_target = True
         if self.hit_target == True:
             print "Yay!"
+
+    
+    
+
 
 
 class Launcher(pygame.sprite.Sprite):
@@ -184,19 +187,33 @@ class Launcher(pygame.sprite.Sprite):
 
 
 
+class Turtle(pygame.sprite.Sprite):
 
+    def __init__(self):
+        super(Turtle, self).__init__()
+        self.start = [targetx, targety]
+        self.image = pygame.image.load("turtle100.png").convert()
+        self.image.set_colorkey(BLACK)
+        self.rect = self.image.get_rect(center=(self.start))
+        changetargetx = 0
+        changetargety = 0
 
+    def update(self):
+        targetx += changetargetx
+        targety += changetargety
+
+  
 
 paper_ball = Ball()
 ball_launcher = Launcher()
-
+turtle = Turtle()
 
 all_sprites = pygame.sprite.Group()
+all_sprites.add(turtle)
 all_sprites.add(paper_ball)
 all_sprites.add(ball_launcher)
 
-turtle = pygame.image.load("turtle100.png").convert()
-turtle.set_colorkey(BLACK)
+
 
 
 # Loop until the user clicks the close button.
@@ -307,7 +324,6 @@ while not done:
 
 
     # Update & display ball sprite
-    screen.blit(turtle, [targetx, targety])
     all_sprites.draw(screen)
 
     paper_ball.target_collision()
