@@ -44,6 +44,7 @@ mouse_down = False
 launch1 = [0,0]
 launch2 = [0,0]
 
+score = 0
 
 
 
@@ -130,7 +131,7 @@ class Ball(pygame.sprite.Sprite):
 
     def target_collision(self):
         self.center = (self.rect[0] + 28, self.rect[1] + 24)
-
+        global score, add1
         if targetx + 17 <= (self.collision1[0] + 7) and (self.collision1[0] + 7) <= targetx + 67 and targety + 15 <= (self.collision1[1] + 4) and (self.collision1[1] + 4) <= targety + 65:
             self.hit_target = True
         elif targetx + 17 <= (self.collision1[0] + 52) and (self.collision1[0] + 52) <= targetx + 67 and targety + 15<= (self.collision1[1] + 4) and (self.collision1[1] + 4) <= targety + 65:
@@ -139,8 +140,16 @@ class Ball(pygame.sprite.Sprite):
             self.hit_target = True
         elif targetx + 17 <= (self.collision1[0] + 52) and (self.collision1[0] + 52) <= targetx + 67 and targety + 15<= (self.collision1[1] + 48) and (self.collision1[1] + 48) <= targety + 65:
             self.hit_target = True
-        if self.hit_target == True:
-            print "Yay!"
+
+        if self.hit_target == True and add1 == True:
+            score += 1
+            add1 = False
+            
+
+
+
+
+
 
     
     
@@ -215,6 +224,7 @@ all_sprites.add(turtle)
 all_sprites.add(paper_ball)
 all_sprites.add(ball_launcher)
 
+font = pygame.font.SysFont('Calibri', 25, True, False)
 
 
 
@@ -301,6 +311,8 @@ while not done:
             change_pos = True
             ball_launcher.return_start = True
 
+            add1 = True
+
 
         if event.type == pygame.MOUSEMOTION and \
             mouse_down == True and \
@@ -329,6 +341,9 @@ while not done:
     all_sprites.draw(screen)
 
     paper_ball.target_collision()
+
+    text = font.render("Score: " + str(score), True, BLACK)
+    screen.blit(text, [0, 0])
 
     # --- Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
