@@ -132,13 +132,13 @@ class Ball(pygame.sprite.Sprite):
     def target_collision(self):
         self.center = (self.rect[0] + 28, self.rect[1] + 24)
         global score, add1
-        if targetx + 17 <= (self.collision1[0] + 7) and (self.collision1[0] + 7) <= targetx + 67 and targety + 15 <= (self.collision1[1] + 4) and (self.collision1[1] + 4) <= targety + 65:
+        if targetx - 50 <= (self.collision1[0] + 7) and (self.collision1[0] + 7) <= targetx +50 and targety -50 <= (self.collision1[1] + 4) and (self.collision1[1] + 4) <= targety + 50:
             self.hit_target = True
-        elif targetx + 17 <= (self.collision1[0] + 52) and (self.collision1[0] + 52) <= targetx + 67 and targety + 15<= (self.collision1[1] + 4) and (self.collision1[1] + 4) <= targety + 65:
+        elif targetx -50 <= (self.collision1[0] + 52) and (self.collision1[0] + 52) <= targetx +50 and targety -50 <= (self.collision1[1] + 4) and (self.collision1[1] + 4) <= targety +50:
             self.hit_target = True
-        elif targetx + 17 <= (self.collision1[0] + 7) and (self.collision1[0] + 7) <= targetx + 67 and targety + 15<= (self.collision1[1] + 48) and (self.collision1[1] + 48) <= targety + 65:
+        elif targetx -50 <= (self.collision1[0] + 7) and (self.collision1[0] + 7) <= targetx +50 and targety -50 <= (self.collision1[1] + 48) and (self.collision1[1] + 48) <= targety +50:
             self.hit_target = True
-        elif targetx + 17 <= (self.collision1[0] + 52) and (self.collision1[0] + 52) <= targetx + 67 and targety + 15<= (self.collision1[1] + 48) and (self.collision1[1] + 48) <= targety + 65:
+        elif targetx -50 <= (self.collision1[0] + 52) and (self.collision1[0] + 52) <= targetx +50 and targety -50 <= (self.collision1[1] + 48) and (self.collision1[1] + 48) <= targety +50:
             self.hit_target = True
 
         if self.hit_target == True and add1 == True:
